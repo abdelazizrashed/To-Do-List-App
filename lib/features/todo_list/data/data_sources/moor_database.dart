@@ -106,10 +106,11 @@ class TaskDao extends DatabaseAccessor<AppDatabase> with _$TaskDaoMixin {
   //Get the completed tasks for a specific project
   Future<List<Task>> getProjectsCompletedTasks(TodoProject project) =>
       (select(tasks)
-            ..where((t) => t.projectName.equals(project.projectName))
-            ..where((tbl) => tbl.completed.equals(true)))
+            ..where((task) => task.projectName.equals(project.projectName))
+            ..where((task) => task.completed.equals(true)))
           .get();
-
+  //
+  //
   //Get the tasks that are due today
   Future<List<Task>> getTodaysTasks() {
     DateTime now = DateTime.now();

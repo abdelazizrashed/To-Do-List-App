@@ -25,10 +25,8 @@ class TodoListRepositoryImpl implements TodoListRepository {
   Future<Either<Failure, List<TodoTask>>> getAllCompletedTasks() async {
     try {
       List<moor.Task> tasksList = await taskDao.getAllCompletedTasks();
-      List<TodoTask> todoTasksList = [];
-      for (var i = 0; i < tasksList.length; i++) {
-        todoTasksList.add(await convertTask2TodoTask(tasksList[i]));
-      }
+      List<TodoTask> todoTasksList =
+          await convertTaskList2TodoTaskList(tasksList);
       return Right(todoTasksList);
     } catch (e) {
       return Left(LocalDataFailure());
@@ -39,10 +37,8 @@ class TodoListRepositoryImpl implements TodoListRepository {
   Future<Either<Failure, List<TodoTask>>> getAllUnfinishedTasks() async {
     try {
       List<moor.Task> tasksList = await taskDao.getAllUnfinishedTasks();
-      List<TodoTask> todoTasksList = [];
-      for (var i = 0; i < tasksList.length; i++) {
-        todoTasksList.add(await convertTask2TodoTask(tasksList[i]));
-      }
+      List<TodoTask> todoTasksList =
+          await convertTaskList2TodoTaskList(tasksList);
       return Right(todoTasksList);
     } catch (e) {
       return Left(LocalDataFailure());
@@ -55,10 +51,8 @@ class TodoListRepositoryImpl implements TodoListRepository {
     try {
       List<moor.Task> tasksList =
           await taskDao.getProjectsCompletedTasks(project);
-      List<TodoTask> todoTasksList = [];
-      for (var i = 0; i < tasksList.length; i++) {
-        todoTasksList.add(await convertTask2TodoTask(tasksList[i]));
-      }
+      List<TodoTask> todoTasksList = 
+          await convertTaskList2TodoTaskList(tasksList);
       return Right(todoTasksList);
     } catch (e) {
       return Left(LocalDataFailure());
@@ -71,10 +65,8 @@ class TodoListRepositoryImpl implements TodoListRepository {
     try {
       List<moor.Task> tasksList =
           await taskDao.getProjectsUnfinishedTasks(project);
-      List<TodoTask> todoTasksList = [];
-      for (var i = 0; i < tasksList.length; i++) {
-        todoTasksList.add(await convertTask2TodoTask(tasksList[i]));
-      }
+      List<TodoTask> todoTasksList =
+          await convertTaskList2TodoTaskList(tasksList);
       return Right(todoTasksList);
     } catch (e) {
       return Left(LocalDataFailure());
@@ -85,10 +77,8 @@ class TodoListRepositoryImpl implements TodoListRepository {
   Future<Either<Failure, List<TodoTask>>> getTodaysTasks() async {
     try {
       List<moor.Task> tasksList = await taskDao.getTodaysTasks();
-      List<TodoTask> todoTasksList = [];
-      for (var i = 0; i < tasksList.length; i++) {
-        todoTasksList.add(await convertTask2TodoTask(tasksList[i]));
-      }
+      List<TodoTask> todoTasksList = 
+          await convertTaskList2TodoTaskList(tasksList);
       return Right(todoTasksList);
     } catch (e) {
       return Left(LocalDataFailure());
@@ -265,5 +255,13 @@ class TodoListRepositoryImpl implements TodoListRepository {
           ? project.parentProject.projectName
           : null,
     );
+  }
+
+  Future<List<TodoTask>> convertTaskList2TodoTaskList(List<moor.Task> tasksList) async {
+    List<TodoTask> todoTasksList = [];
+    for (var i = 0; i < tasksList.length; i++) {
+      todoTasksList.add(await convertTask2TodoTask(tasksList[i]));
+    }
+    return todoTasksList;
   }
 }

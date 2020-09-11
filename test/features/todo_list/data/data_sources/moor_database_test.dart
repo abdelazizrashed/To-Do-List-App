@@ -2,8 +2,11 @@ import 'package:matcher/matcher.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:moor_ffi/moor_ffi.dart';
 import 'package:todo_list/features/todo_list/data/data_sources/moor_database.dart';
+import 'package:todo_list/features/todo_list/data/repositories/todo_list_repository_impl.dart';
+import 'package:todo_list/features/todo_list/domain/entities/todo_project.dart';
 
 void main() {
+  TodoListRepositoryImpl repository;
   AppDatabase db;
   TaskDao taskDao;
   TagDao tagDao;
@@ -14,6 +17,12 @@ void main() {
     taskDao = TaskDao(db);
     tagDao = TagDao(db);
     projectDao = ProjectDao(db);
+    repository = TodoListRepositoryImpl(
+      db: db,
+      taskDao: taskDao,
+      tagDao: tagDao,
+      projectDao: projectDao,
+    );
   });
 
   group('TaskDao', () {
@@ -24,6 +33,16 @@ void main() {
     DateTime today = DateTime(now.year, now.month, now.day);
     final taskDueToday =
         Task(taskName: 'Task due today', completed: false, dueDate: today);
+    final project = Project(projectName: 'test project');
+    final taskWithProjectCompleted = Task(
+        taskName: 'task with project completed',
+        projectName: project.projectName,
+        completed: true
+        );
+    final taskWithProjectUnfinished = Task(
+        taskName: 'task with project unfinished ',
+        projectName: project.projectName, 
+        completed: false);
 
     //*insertTask
     test('should insert a task successfuly', () async {
@@ -71,32 +90,36 @@ void main() {
       expect(result[0].id, id);
     });
 
-    //Todo: fix these tests when you finish the rest of the tables
-    // //*getProjectsCompletedTasks
-    // test(
-    //     'Should return list of all the completed tasks of a specific project when getProjectsCompletedTasks is called ',
-    //     () async {
-    //   //arrang
-    //   int id = await taskDao.insertTask(taskWithProjectCompleted);
-    //   //act
-    //   final result = await taskDao.getProjectsCompletedTasks(project);
-    //   //assert
-    //   expect(result, TypeMatcher<List<Task>>());
-    //   expect(result[0].taskName, taskWithProjectCompleted.taskName);
-    //   expect(result[0].id, id);
-    // });
+    //*getProjectsCompletedTasks
+    test(
+        'Should return list of all the completed tasks of a specific project when getProjectsCompletedTasks is called ',
+        () async {
+      //arrang
+      await projectDao.insertProject(project);
+      int id = await taskDao.insertTask(taskWithProjectCompleted);
+      //act
+      final todoProject = await repository.convertProject2TodoProject(project);
+      final result = await taskDao.getProjectsCompletedTasks(todoProject);
+      //assert
+      expect(result, TypeMatcher<List<Task>>());
+      expect(result[0].taskName, taskWithProjectCompleted.taskName);
+      expect(result[0].id, id);
+    });
 
-    // //*getProjectsUnfinishedTasks
-    // test('Should return list of the unfinished tasks of a specific project ', () async {
-    //   //arrang
-    //   int id = await taskDao.insertTask(taskWithProjectUnfinished);
-    //   //act
-    //   final result = await taskDao.getProjectsUnfinishedTasks(project);
-    //   //assert
-    //   expect(result, TypeMatcher<List<Task>>());
-    //   expect(result[0].taskName, taskWithProjectUnfinished.taskName);
-    //   expect(result[0].id, id);
-    // });
+    //*getProjectsUnfinishedTasks
+    test('Should return list of the unfinished tasks of a specific project ',
+        () async {
+      //arrang
+      await projectDao.insertProject(project);
+      int id = await taskDao.insertTask(taskWithProjectUnfinished);
+      //act
+      final result = await taskDao.getProjectsUnfinishedTasks(
+          await repository.convertProject2TodoProject(project));
+      //assert
+      expect(result, TypeMatcher<List<Task>>());
+      expect(result[0].taskName, taskWithProjectUnfinished.taskName);
+      expect(result[0].id, id);
+    });
 
     //*getTodaysTasks
     test('Should return list of tasks that are due today', () async {
@@ -110,25 +133,6 @@ void main() {
       expect(result[0].id, id);
     });
 
-    //Todo: you can fix this or delete it preferably delete it
-    // //*updateTask
-    // test('stream emits a new user when the name updates', () async {
-    //   final id = await taskDao.insertTask(taskUnfinished);
-
-    //   final expectation = expectLater(
-    //     taskDao
-    //         .watchTaskWithId(id)
-    //         .map((tasks) => tasks.completed),
-    //     emitsInOrder([taskUnfinished.completed, taskCompleted.completed]),
-    //   );
-
-    //   await expectation;
-    //   await taskDao.updateTask(taskCompleted);
-      
-    // });
-
-    //*deleteTask
-    //I can't test it
   });
 
   group('tagDao', () {
