@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:moor_ffi/moor_ffi.dart';
 import 'package:todo_list/features/todo_list/data/data_sources/moor_database.dart';
 import 'package:todo_list/features/todo_list/data/repositories/todo_list_repository_impl.dart';
-import 'package:todo_list/features/todo_list/domain/entities/todo_project.dart';
 
 void main() {
   TodoListRepositoryImpl repository;

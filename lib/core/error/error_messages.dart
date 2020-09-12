@@ -1,0 +1,1 @@
+const LOCAL_DATA_ERROR = 'Something went wrong! Please try again.';
