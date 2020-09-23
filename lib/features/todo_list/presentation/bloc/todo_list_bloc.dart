@@ -151,7 +151,6 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
         },
       );
     } else if (event is GetAllProjectsEvent) {
-      
       yield Loading();
       final projectsEither = await getAllProjects(NoParams());
       yield* projectsEither.fold(

@@ -20,6 +20,24 @@ class TodoTask extends Equatable {
     this.completed,
   });
 
+  TodoTask copyWith({
+    int id,
+    String taskName,
+    DateTime dueDate,
+    TodoTag tag,
+    TodoProject project,
+    bool completed,
+  }) {
+    return TodoTask(
+      id: id ?? this.id,
+      taskName: taskName ?? this.taskName,
+      dueDate: dueDate ?? this.dueDate,
+      tag: tag ?? this.tag,
+      project: project ?? this.project,
+      completed: completed ?? this.completed,
+    );
+  }
+
   @override
   List<Object> get props => [
         taskName,

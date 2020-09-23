@@ -48,7 +48,7 @@ dev_dependencies:
   mockito: ^4.1.1
   #Generate code and for moor
   moor_generator: ^3.3.1
-  build_runner:
+  build_runner: null
   moor_ffi: ^0.8.0
 
 dependency_overrides:

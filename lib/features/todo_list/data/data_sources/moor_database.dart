@@ -89,25 +89,43 @@ class TaskDao extends DatabaseAccessor<AppDatabase> with _$TaskDaoMixin {
       (select(tasks)..where((tbl) => tbl.id.equals(id))).get();
 
   //Get all the unfinished tasks
-  Future<List<Task>> getAllUnfinishedTasks() =>
-      (select(tasks)..where((tbl) => tbl.completed.equals(false))).get();
+  Future<List<Task>> getAllUnfinishedTasks() => (select(tasks)
+        ..where((tbl) => tbl.completed.equals(false))
+        ..orderBy([
+          (t) => OrderingTerm(expression: t.dueDate),
+          (t) => OrderingTerm(expression: t.taskName),
+        ]))
+      .get();
 
   //Get all the completed tasks
-  Future<List<Task>> getAllCompletedTasks() =>
-      (select(tasks)..where((tbl) => tbl.completed.equals(true))).get();
+  Future<List<Task>> getAllCompletedTasks() => (select(tasks)
+        ..where((tbl) => tbl.completed.equals(true))
+        ..orderBy([
+          (t) => OrderingTerm(expression: t.dueDate),
+          (t) => OrderingTerm(expression: t.taskName),
+        ]))
+      .get();
 
   //Get the unfinished tasks for a specific project
   Future<List<Task>> getProjectsUnfinishedTasks(TodoProject project) =>
       (select(tasks)
             ..where((t) => t.projectName.equals(project.projectName))
-            ..where((tbl) => tbl.completed.equals(false)))
+            ..where((tbl) => tbl.completed.equals(false))
+            ..orderBy([
+              (t) => OrderingTerm(expression: t.dueDate),
+              (t) => OrderingTerm(expression: t.taskName),
+            ]))
           .get();
 
   //Get the completed tasks for a specific project
   Future<List<Task>> getProjectsCompletedTasks(TodoProject project) =>
       (select(tasks)
             ..where((task) => task.projectName.equals(project.projectName))
-            ..where((task) => task.completed.equals(true)))
+            ..where((task) => task.completed.equals(true))
+            ..orderBy([
+              (t) => OrderingTerm(expression: t.dueDate),
+              (t) => OrderingTerm(expression: t.taskName),
+            ]))
           .get();
   //
   //
@@ -115,7 +133,12 @@ class TaskDao extends DatabaseAccessor<AppDatabase> with _$TaskDaoMixin {
   Future<List<Task>> getTodaysTasks() {
     DateTime now = DateTime.now();
     DateTime today = DateTime(now.year, now.month, now.day);
-    return (select(tasks)..where((t) => t.dueDate.equals(today))).get();
+    return (select(tasks)
+          ..where((t) => t.dueDate.equals(today))
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.taskName),
+          ]))
+        .get();
   }
 
   //* Insertion
@@ -139,8 +162,6 @@ class TagDao extends DatabaseAccessor<AppDatabase> with _$TagDaoMixin {
   final AppDatabase db;
 
   TagDao(this.db) : super(db);
-
-  //Todo: modify all these classes to return TagModel insetead of tag
 
   //*Insertion
   Future insertTag(Tag tag) => into(tags).insert(tag);
@@ -170,8 +191,6 @@ class ProjectDao extends DatabaseAccessor<AppDatabase> with _$ProjectDaoMixin {
   final AppDatabase db;
 
   ProjectDao(this.db) : super(db);
-
-  //Todo: change all these methods to return ProjectModel instead of Project
 
   //*Insertion
   Future insertProject(Project project) => into(projects).insert(project);
