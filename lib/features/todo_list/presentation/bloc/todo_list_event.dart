@@ -29,6 +29,8 @@ class GetProjectsCompletedTasksEvent extends TodoListEvent {
   GetProjectsCompletedTasksEvent(this.project);
 }
 
+class GetTodaysTasksEvent extends TodoListEvent{}
+
 class ModifyTaskEvent extends TodoListEvent {
   final TodoTask task;
 

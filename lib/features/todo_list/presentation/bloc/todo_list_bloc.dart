@@ -20,6 +20,7 @@ import 'package:todo_list/features/todo_list/domain/use_cases/get_all_tags.dart'
 import 'package:todo_list/features/todo_list/domain/use_cases/get_all_unfinished_tasks.dart';
 import 'package:todo_list/features/todo_list/domain/use_cases/get_projects_completed_tasks.dart';
 import 'package:todo_list/features/todo_list/domain/use_cases/get_projects_unfinished_tasks.dart';
+import 'package:todo_list/features/todo_list/domain/use_cases/get_todays_tasks.dart';
 import 'package:todo_list/features/todo_list/domain/use_cases/modify_tag.dart';
 import 'package:todo_list/features/todo_list/domain/use_cases/modify_task.dart';
 
@@ -32,6 +33,7 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
   final GetAllUnfinishedTasks getAllUnfinishedTasks;
   final GetProjectsCompletedTasks getProjectsCompletedTasks;
   final GetProjectsUnfinishedTasks getProjectsUnfinishedTasks;
+  final GetTodaysTasks getTodaysTasks;
   final ModifyTask modifyTask;
   final DeleteTask deleteTask;
   final AddTag addTag;
@@ -48,6 +50,7 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
     @required this.getAllUnfinishedTasks,
     @required this.getProjectsCompletedTasks,
     @required this.getProjectsUnfinishedTasks,
+    @required this.getTodaysTasks,
     @required this.modifyTask,
     @required this.deleteTask,
     @required this.addTag,
@@ -62,6 +65,7 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
         assert(getAllUnfinishedTasks != null),
         assert(getProjectsCompletedTasks != null),
         assert(getProjectsUnfinishedTasks != null),
+        assert(getTodaysTasks != null),
         assert(modifyTask != null),
         assert(deleteTask != null),
         assert(addTag != null),
@@ -93,7 +97,7 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
       await addProject(event.project);
     } else if (event is DeleteProjectEvent) {
       await deleteProject(event.project);
-    } else if (event is GetAllUnfinishedTasksEvent) {
+    }else if (event is GetAllUnfinishedTasksEvent) {
       yield Loading();
       final tasksEither = await getAllUnfinishedTasks(NoParams());
       yield* tasksEither.fold(
@@ -139,7 +143,19 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
               project: event.project, tasksList: value);
         },
       );
-    } else if (event is GetAllTagsEvent) {
+    } else if (event is GetTodaysTasksEvent){
+      yield Loading();
+      final tasksEither = await getTodaysTasks(NoParams());
+      yield* tasksEither.fold(
+        (failure) async* {
+          yield Error(LOCAL_DATA_ERROR);
+        },
+        (value) async* {
+          yield AllTodaysTasksState(value);
+        },
+      );
+    } 
+    else if (event is GetAllTagsEvent) {
       yield Loading();
       final tagsEither = await getAllTags(NoParams());
       yield* tagsEither.fold(
@@ -163,4 +179,5 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
       );
     }
   }
+ 
 }

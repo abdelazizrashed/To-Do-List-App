@@ -14,6 +14,7 @@ import 'package:todo_list/features/todo_list/domain/use_cases/get_all_tags.dart'
 import 'package:todo_list/features/todo_list/domain/use_cases/get_all_unfinished_tasks.dart';
 import 'package:todo_list/features/todo_list/domain/use_cases/get_projects_completed_tasks.dart';
 import 'package:todo_list/features/todo_list/domain/use_cases/get_projects_unfinished_tasks.dart';
+import 'package:todo_list/features/todo_list/domain/use_cases/get_todays_tasks.dart';
 import 'package:todo_list/features/todo_list/domain/use_cases/modify_tag.dart';
 import 'package:todo_list/features/todo_list/domain/use_cases/modify_task.dart';
 import 'package:todo_list/features/todo_list/presentation/bloc/todo_list_bloc.dart';
@@ -28,21 +29,22 @@ Future<void> init() async {
 void initTodoListFeature() {
   //BLoC
   sl.registerFactory(() => TodoListBloc(
-      addTask: sl(),
-      getAllCompletedTasks: sl(),
-      getAllUnfinishedTasks: sl(),
-      getProjectsCompletedTasks: sl(),
-      getProjectsUnfinishedTasks: sl(),
-      modifyTask: sl(),
-      deleteTask: sl(),
-      addTag: sl(),
-      getAllTags: sl(),
-      modifyTag: sl(),
-      deleteTag: sl(),
-      addProject: sl(),
-      getAllProjects: sl(),
-      deleteProject: sl(),
-    ));
+        addTask: sl(),
+        getAllCompletedTasks: sl(),
+        getAllUnfinishedTasks: sl(),
+        getProjectsCompletedTasks: sl(),
+        getProjectsUnfinishedTasks: sl(),
+        getTodaysTasks: sl(),
+        modifyTask: sl(),
+        deleteTask: sl(),
+        addTag: sl(),
+        getAllTags: sl(),
+        modifyTag: sl(),
+        deleteTag: sl(),
+        addProject: sl(),
+        getAllProjects: sl(),
+        deleteProject: sl(),
+      ));
 
   //Use cases
   sl.registerLazySingleton(() => AddTask(sl()));
@@ -50,6 +52,7 @@ void initTodoListFeature() {
   sl.registerLazySingleton(() => GetAllCompletedTasks(sl()));
   sl.registerLazySingleton(() => GetProjectsCompletedTasks(sl()));
   sl.registerLazySingleton(() => GetProjectsUnfinishedTasks(sl()));
+  sl.registerLazySingleton(() => GetTodaysTasks(sl()));
   sl.registerLazySingleton(() => ModifyTask(sl()));
   sl.registerLazySingleton(() => DeleteTask(sl()));
   sl.registerLazySingleton(() => AddTag(sl()));

@@ -6,6 +6,8 @@ import 'package:todo_list/features/todo_list/domain/entities/todo_task.dart';
 import 'package:todo_list/features/todo_list/presentation/bloc/todo_list_bloc.dart';
 import 'package:todo_list/features/todo_list/presentation/widgets/display_message.dart';
 import 'package:todo_list/features/todo_list/presentation/widgets/loading_widget.dart';
+import 'package:todo_list/features/todo_list/presentation/widgets/new_project_input_field.dart';
+import 'package:todo_list/features/todo_list/presentation/widgets/new_tag_input_field.dart';
 import 'package:todo_list/injection_container.dart';
 
 class NewTaskInputWidget extends StatefulWidget {
@@ -48,6 +50,7 @@ class _NewTaskInputWidgetState extends State<NewTaskInputWidget> {
                   child: Column(
                     children: <Widget>[
                       TextField(
+                        controller: controller,
                         decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
                               borderRadius:
@@ -72,7 +75,6 @@ class _NewTaskInputWidgetState extends State<NewTaskInputWidget> {
                       SizedBox(
                         height: 5,
                       ),
-                      //Todo: Implement the button so that when it is clicked it will go out of the routes and submit the new task
                       IconButton(
                         icon: Icon(Icons.send),
                         onPressed: () async {
@@ -85,10 +87,9 @@ class _NewTaskInputWidgetState extends State<NewTaskInputWidget> {
                           }
                           _addNewTask(providerContext);
                           _resetValuesAfterSubmit();
+                          //navigation to the route it cam from so that it builds the page again
                           Navigator.popUntil(context, ModalRoute.withName('/'));
-                          if (route == '/') {
-                            Navigator.pushNamed(context, '/');
-                          }
+                          Navigator.pushNamed(context, route);
                         },
                       )
                     ],
@@ -172,12 +173,37 @@ class _NewTaskInputWidgetState extends State<NewTaskInputWidget> {
                         ),
                       ),
                     ),
-                    //Todo: Implement on pressed function so that pops all pages and navigate to add new tag page
                     Expanded(
                       flex: 1,
                       child: IconButton(
                         icon: Icon(Icons.add),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.popUntil(
+                              context, ModalRoute.withName(route));
+                          Navigator.pushNamed(context, route);
+
+                          showGeneralDialog(
+                            barrierLabel: "Label",
+                            barrierDismissible: true,
+                            barrierColor: Colors.black.withOpacity(0.5),
+                            transitionDuration: Duration(milliseconds: 700),
+                            context: context,
+                            pageBuilder: (context, anim, _) {
+                              return NewTagInputField(
+                                route: route,
+                              );
+                            },
+                            transitionBuilder: (context, anim1, anim2, child) {
+                              return SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: Offset(0, 1),
+                                  end: Offset(0, 0),
+                                ).animate(anim1),
+                                child: child,
+                              );
+                            },
+                          );
+                        },
                       ),
                     ),
                   ],
@@ -269,12 +295,35 @@ class _NewTaskInputWidgetState extends State<NewTaskInputWidget> {
                         ),
                       ),
                     ),
-                    //Todo: Implement on pressed function so that pops all pages and navigate to add new project page
                     Expanded(
                       flex: 1,
                       child: IconButton(
                         icon: Icon(Icons.add),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.popUntil(
+                              context, ModalRoute.withName(route));
+                          Navigator.pushNamed(context, route);
+
+                          showGeneralDialog(
+                            barrierLabel: "Label",
+                            barrierDismissible: true,
+                            barrierColor: Colors.black.withOpacity(0.5),
+                            transitionDuration: Duration(milliseconds: 700),
+                            context: context,
+                            pageBuilder: (context, anim, _) {
+                              return NewProjectInputField(route: route);
+                            },
+                            transitionBuilder: (context, anim1, anim2, child) {
+                              return SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: Offset(0, 1),
+                                  end: Offset(0, 0),
+                                ).animate(anim1),
+                                child: child,
+                              );
+                            },
+                          );
+                        },
                       ),
                     ),
                   ],
@@ -287,6 +336,8 @@ class _NewTaskInputWidgetState extends State<NewTaskInputWidget> {
     );
   }
 
+  ///returns a ListView containing all the projects in form of list tiles and add
+  ///to them an event so that when it is clicked it register the project to be the newTaskProject
   ListView _buildProjectDialogCards(
       BuildContext context, List<TodoProject> projects) {
     List<Widget> projectCards = [];
@@ -309,6 +360,7 @@ class _NewTaskInputWidgetState extends State<NewTaskInputWidget> {
     );
   }
 
+  //adds the new task into the database
   void _addNewTask(BuildContext context) {
     TodoTask newTask = TodoTask(
       taskName: newTaskName,

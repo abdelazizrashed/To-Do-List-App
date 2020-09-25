@@ -43,6 +43,12 @@ class AllProjectsCompletedTasksState extends TodoListState {
   });
 }
 
+class AllTodaysTasksState extends TodoListState{
+  final List<TodoTask> tasksList;
+
+  AllTodaysTasksState(this.tasksList);
+}
+
 class AllProjectsState extends TodoListState {
   final List<TodoProject> projectsList;
 

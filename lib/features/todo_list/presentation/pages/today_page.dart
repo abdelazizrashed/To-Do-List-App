@@ -9,18 +9,16 @@ import 'package:todo_list/features/todo_list/presentation/widgets/new_task_float
 import 'package:todo_list/features/todo_list/presentation/widgets/task_card.dart';
 import 'package:todo_list/injection_container.dart';
 
-class UpCommingPage extends StatelessWidget {
+class TodayPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Upcomming'),
+        title: Text('Today'),
       ),
       drawer: SideMenuDrawer(),
+      floatingActionButton: NewTaskFloatingButton(route: '/today'),
       body: buildBody(context),
-      floatingActionButton: NewTaskFloatingButton(
-        route: '/',
-      ),
     );
   }
 
@@ -30,20 +28,18 @@ class UpCommingPage extends StatelessWidget {
       child: BlocBuilder<TodoListBloc, TodoListState>(
         builder: (context, state) {
           if (state is Empty) {
-            BlocProvider.of<TodoListBloc>(context)
-                .add(GetAllUnfinishedTasksEvent());
+            BlocProvider.of<TodoListBloc>(context).add(GetTodaysTasksEvent());
             return LoadingWidget();
           } else if (state is Loading) {
             return LoadingWidget();
-          } else if (state is AllUnfinishedTasksState) {
+          } else if (state is AllTodaysTasksState) {
             if (state.tasksList?.isEmpty ?? true) {
               return DisplayMessage(message: 'You are all done!');
             } else {
-              return buildTasksList(context, state.tasksList);
+              return _buildTasksList(context, state.tasksList);
             }
           } else {
-            BlocProvider.of<TodoListBloc>(context)
-                .add(GetAllUnfinishedTasksEvent());
+            BlocProvider.of<TodoListBloc>(context).add(GetTodaysTasksEvent());
             return LoadingWidget();
           }
         },
@@ -51,7 +47,7 @@ class UpCommingPage extends StatelessWidget {
     );
   }
 
-  ListView buildTasksList(BuildContext context, List<TodoTask> tasks) {
+  ListView _buildTasksList(BuildContext context, List<TodoTask> tasks) {
     List<Widget> tasksList = [];
     tasks.forEach((task) {
       tasksList.add(TaskCard(task: task, route: '/'));

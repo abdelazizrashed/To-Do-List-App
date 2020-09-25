@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_list/features/todo_list/presentation/pages/today_page.dart';
 import 'package:todo_list/features/todo_list/presentation/pages/upcomming_page.dart';
 
 class RouteGenerator {
@@ -9,6 +10,8 @@ class RouteGenerator {
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(builder: (_) => UpCommingPage());
+      case '/today':
+        return MaterialPageRoute(builder: (_) => TodayPage());
     }
   }
 }
