@@ -1,6 +1,6 @@
-# todo_list
+# To Do List App
 
-A new Flutter application.
+A To Do List flutter application that is similar to the mobile application Todiost.
 
 ## Getting Started
 
