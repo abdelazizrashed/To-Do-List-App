@@ -26,18 +26,23 @@ void main() {
 
   group('TaskDao', () {
     //?variable for testing
+    // ignore: missing_required_param
     final taskUnfinished = Task(taskName: 'task unfinished', completed: false);
+    // ignore: missing_required_param
     final taskCompleted = Task(taskName: 'task completed', completed: true);
     DateTime now = DateTime.now();
     DateTime today = DateTime(now.year, now.month, now.day);
     final taskDueToday =
+        // ignore: missing_required_param
         Task(taskName: 'Task due today', completed: false, dueDate: today);
     final project = Project(projectName: 'test project');
+    // ignore: missing_required_param
     final taskWithProjectCompleted = Task(
         taskName: 'task with project completed',
         projectName: project.projectName,
         completed: true
         );
+    // ignore: missing_required_param
     final taskWithProjectUnfinished = Task(
         taskName: 'task with project unfinished ',
         projectName: project.projectName, 

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list/core/utilities/todo_project2project_tree_converter.dart';
-import 'package:todo_list/features/todo_list/domain/entities/todo_project.dart';
 import 'package:todo_list/injection_container.dart' as di;
 import 'package:todo_list/route_generator.dart';
 

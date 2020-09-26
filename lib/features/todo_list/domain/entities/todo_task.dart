@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 import 'package:todo_list/features/todo_list/domain/entities/todo_project.dart';
 import 'package:todo_list/features/todo_list/domain/entities/todo_tag.dart';
 
+// ignore: must_be_immutable
 class TodoTask extends Equatable {
   int id;
   final String taskName;

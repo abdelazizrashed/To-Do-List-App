@@ -103,6 +103,7 @@ void main() {
 
   //! getAllUnfinishedTasks method tests
   group('getAllUnfinishedTasks', () {
+    // ignore: missing_required_param
     final moor.Task task = moor.Task(taskName: 'test task', completed: false);
 
     test('Should return a list of the unfinished tasks', () async {
@@ -135,6 +136,7 @@ void main() {
 
   //! getAllCompletedTasks method tests
   group('getAllCompletedTasks method tests', () {
+    // ignore: missing_required_param
     final moor.Task task = moor.Task(taskName: 'test task', completed: true);
 
     test('Should return a list of the completed tasks', () async {
@@ -167,6 +169,7 @@ void main() {
   //! getProjectsUnfinishedTasks method tests
   group('getProjectsUnfinishedTasks method tests', () {
     final project = moor.Project(projectName: 'test project');
+    // ignore: missing_required_param
     final moor.Task task = moor.Task(
         taskName: 'test task',
         completed: false,
@@ -207,6 +210,7 @@ void main() {
   //! getProjectsCompletedTasks method test
   group('getProjectsCompletedTasks method test', () {
     final project = moor.Project(projectName: 'test project');
+    // ignore: missing_required_param
     final moor.Task task = moor.Task(
         taskName: 'test task',
         completed: true,
@@ -250,6 +254,7 @@ void main() {
     DateTime now = DateTime.now();
     DateTime today = DateTime(now.year, now.month, now.day);
     final moor.Task task =
+        // ignore: missing_required_param
         moor.Task(taskName: 'test task', completed: false, dueDate: today);
 
     test('Should get a list of the tasks that are due today ', () async {
@@ -281,6 +286,7 @@ void main() {
 
   //! addTask
   group('addTask method test', () {
+    // ignore: missing_required_param
     final moor.Task task = moor.Task(taskName: 'test task', completed: false);
 
     test('Should call the insertTask method when a task is added ', () async {
@@ -310,6 +316,7 @@ void main() {
 
   //! deleteTask
   group('deleteTask method test', () {
+    // ignore: missing_required_param
     final moor.Task task = moor.Task(taskName: 'test task', completed: false);
 
     test('Should call the delete task method when a task is deleted ',
@@ -339,6 +346,7 @@ void main() {
 
   //! modifyTask
   group('modifyTask method test', () {
+    // ignore: missing_required_param
     final moor.Task task = moor.Task(
       taskName: 'test task',
       completed: false,

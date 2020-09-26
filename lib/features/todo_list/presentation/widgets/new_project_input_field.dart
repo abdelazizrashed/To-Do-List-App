@@ -124,10 +124,7 @@ class _NewProjectInputFieldState extends State<NewProjectInputField> {
                         if (state is Empty) {
                           BlocProvider.of<TodoListBloc>(context)
                               .add(GetAllProjectsEvent());
-                          return DisplayMessage(
-                            message: 'State is empty',
-                            fontSize: 25,
-                          );
+                          return LoadingWidget();
                         } else if (state is Loading) {
                           return LoadingWidget();
                         } else if (state is AllProjectsState) {
@@ -140,6 +137,10 @@ class _NewProjectInputFieldState extends State<NewProjectInputField> {
                             return _buildProjectDialogCards(
                                 context, state.projectsList);
                           }
+                        } else {
+                          BlocProvider.of<TodoListBloc>(context)
+                              .add(GetAllProjectsEvent());
+                          return LoadingWidget();
                         }
                       },
                     ),

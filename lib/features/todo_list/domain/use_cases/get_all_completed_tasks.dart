@@ -11,6 +11,6 @@ class GetAllCompletedTasks implements UseCase<List<TodoTask>, NoParams> {
 
   @override
   Future<Either<Failure, List<TodoTask>>> call(NoParams params) {
-    return todoListRepository.getAllUnfinishedTasks();
+    return todoListRepository.getAllCompletedTasks();
   }
 }

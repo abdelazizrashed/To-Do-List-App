@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_list/core/widgets/side_menu_drawer.dart';
+import 'package:todo_list/features/todo_list/domain/entities/todo_project.dart';
 import 'package:todo_list/features/todo_list/domain/entities/todo_task.dart';
 import 'package:todo_list/features/todo_list/presentation/bloc/todo_list_bloc.dart';
 import 'package:todo_list/features/todo_list/presentation/widgets/display_message.dart';
@@ -9,18 +10,20 @@ import 'package:todo_list/features/todo_list/presentation/widgets/new_task_float
 import 'package:todo_list/features/todo_list/presentation/widgets/task_card.dart';
 import 'package:todo_list/injection_container.dart';
 
-class UpCommingPage extends StatelessWidget {
+class ProjectsTasksPage extends StatelessWidget {
+  final TodoProject project;
+
+  const ProjectsTasksPage({Key key, @required this.project}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Upcomming'),
+        title: Text(project.projectName),
       ),
       drawer: SideMenuDrawer(),
       body: buildBody(context),
-      floatingActionButton: NewTaskFloatingButton(
-        route: '/',
-      ),
+      //Todo: added a route
+      floatingActionButton: NewTaskFloatingButton(route: '/projectsTasks'),
     );
   }
 
@@ -31,11 +34,11 @@ class UpCommingPage extends StatelessWidget {
         builder: (context, state) {
           if (state is Empty) {
             BlocProvider.of<TodoListBloc>(context)
-                .add(GetAllUnfinishedTasksEvent());
+                .add(GetProjectsUnfinishedTasksEvent(project));
             return LoadingWidget();
           } else if (state is Loading) {
             return LoadingWidget();
-          } else if (state is AllUnfinishedTasksState) {
+          } else if (state is AllProjectsUnfinishedTasksState) {
             if (state.tasksList?.isEmpty ?? true) {
               return DisplayMessage(message: 'You are all done!');
             } else {
@@ -43,7 +46,7 @@ class UpCommingPage extends StatelessWidget {
             }
           } else {
             BlocProvider.of<TodoListBloc>(context)
-                .add(GetAllUnfinishedTasksEvent());
+                .add(GetProjectsUnfinishedTasksEvent(project));
             return LoadingWidget();
           }
         },
