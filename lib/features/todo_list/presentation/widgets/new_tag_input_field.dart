@@ -107,12 +107,15 @@ class _NewTagInputFieldState extends State<NewTagInputField> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          content: MaterialColorPicker(
-            selectedColor: DEFAULT_COLOR,
-            onMainColorChange: (color) {
-              newTagColor = color;
-              Navigator.of(context).pop();
-            },
+          content: Container(
+            height: 300,
+            child: MaterialColorPicker(
+              selectedColor: DEFAULT_COLOR,
+              onMainColorChange: (color) {
+                newTagColor = color;
+                Navigator.of(context).pop();
+              },
+            ),
           ),
         );
       },

@@ -104,11 +104,11 @@ void main() {
     );
   });
 
-  test('should check that the intial state is Empty', () {
+  test('should check that the initial state is Empty', () {
     expect(bloc.state, equals(Empty()));
   });
 
-//Todo: now I will work as if getting the data when the there is a change will happen inside the ui but if that is not the case just chang the bloc that every time a something change emit a state with the new changes
+//Todo: now I will work as if getting the data when the there is a change will happen inside the UI but if that is not the case just change the bloc that every time a something change emit a state with the new changes
   group('events that do not emit states', () {
     final TodoTask task = TodoTask(taskName: 'test task');
     final TodoTag tag = TodoTag(tagName: 'test tag', tagColor: 4);
